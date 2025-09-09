@@ -7,14 +7,12 @@ import {
   MapPin, 
   Clock, 
   Trophy,
-  ArrowUp,
   Mail
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export function Footer() {
   const [isVisible, setIsVisible] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,23 +29,13 @@ export function Footer() {
       observer.observe(element);
     }
 
-    // Scroll to top button
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 500);
-    };
-
-    window.addEventListener('scroll', handleScroll);
     return () => {
       if (element) {
         observer.unobserve(element);
       }
-      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const contactInfo = [
     {
@@ -200,15 +188,6 @@ export function Footer() {
         </div>
 
         {/* Scroll to Top Button */}
-        {showScrollTop && (
-          <Button
-            onClick={scrollToTop}
-            className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 z-50"
-            size="sm"
-          >
-            <ArrowUp className="w-5 h-5" />
-          </Button>
-        )}
       </footer>
     </>
   );

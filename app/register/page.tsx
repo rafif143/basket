@@ -108,10 +108,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black w-full overflow-x-hidden">
 
       {/* Hero Section */}
-      <section className="relative pt-16 md:pt-20 pb-12 md:pb-16 bg-gradient-to-br from-black via-gray-900 to-black">
+      <section className="relative pt-16 md:pt-20 pb-12 md:pb-16 bg-gradient-to-br from-black via-gray-900 to-black w-full">
         <div className="absolute inset-0">
           <div className="absolute inset-0 opacity-10">
             <div className="w-full h-full" style={{
@@ -127,7 +127,7 @@ export default function RegisterPage() {
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 text-center">
+        <div className="relative z-10 w-full px-1 sm:px-4 text-center">
           <Badge 
             variant="outline" 
             className="mb-6 border-orange-500 text-orange-400 bg-orange-500/10 px-4 py-2 text-sm font-medium"
@@ -153,13 +153,13 @@ export default function RegisterPage() {
       </section>
 
       {/* Registration Form */}
-      <section className="py-8 md:py-16 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+      <section className="py-8 md:py-16 bg-black w-full">
+        <div className="w-full px-1 sm:px-4">
+          <div className="w-full max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {/* Form */}
               <div className="lg:col-span-2 order-2 lg:order-1">
-                <Card className="bg-black/40 backdrop-blur-sm border border-orange-500/20">
+                <Card className="bg-black/40 backdrop-blur-sm border border-orange-500/20 mx-0">
                   <CardHeader>
                     <CardTitle className="text-2xl font-bold text-white flex items-center">
                       <User className="w-6 h-6 mr-3 text-orange-500" />
@@ -371,7 +371,7 @@ export default function RegisterPage() {
 
               {/* Requirements Sidebar */}
               <div className="lg:col-span-1 order-1 lg:order-2">
-                <Card className="bg-black/40 backdrop-blur-sm border border-orange-500/20 lg:sticky lg:top-24">
+                <Card className="bg-black/40 backdrop-blur-sm border border-orange-500/20 lg:sticky lg:top-24 mx-0">
                   <CardHeader>
                     <CardTitle className="text-xl font-bold text-white flex items-center">
                       <CheckCircle className="w-5 h-5 mr-2 text-orange-500" />
