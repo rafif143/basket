@@ -29,10 +29,6 @@ export default function ReportsPage() {
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchReportData();
-  }, []);
-
   const fetchReportData = async () => {
     try {
       setLoading(true);
@@ -71,6 +67,10 @@ export default function ReportsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchReportData();
+  }, []);
 
   const exportToCSV = () => {
     // This would typically fetch all data and export to CSV
