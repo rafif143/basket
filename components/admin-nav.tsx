@@ -17,7 +17,7 @@ import {
 
 export function AdminNav({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [session, setSession] = useState<{ user: { email: string } } | null>(null);
+  const [session, setSession] = useState<{ user: { email?: string } } | null>(null);
   const pathname = usePathname();
   const router = useRouter();
 
