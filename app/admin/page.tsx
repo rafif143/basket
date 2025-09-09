@@ -33,15 +33,49 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [whatsappUrls, setWhatsappUrls] = useState<{[key: string]: string}>({});
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  useEffect(() => {
-    if (recentRegistrations.length > 0) {
-      generateWhatsAppUrls();
+  const getWhatsAppUrl = async (phone: string, nama: string) => {
+    if (!phone || !nama) {
+      console.log('Missing data:', { phone, nama });
+      return '#';
     }
-  }, [recentRegistrations, generateWhatsAppUrls]);
+    const formattedPhone = formatPhoneNumber(phone);
+    console.log('WhatsApp URL:', { originalPhone: phone, formattedPhone, nama });
+    
+    // Get template from database
+    try {
+      const result = await settingsService.getSetting('whatsapp_template');
+      const template = result.success && result.data 
+        ? result.data.value 
+        : `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
+      
+      // Replace {nama} placeholder with actual name
+      const personalizedTemplate = template.replace('{nama}', nama);
+      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(personalizedTemplate)}`;
+    } catch (error) {
+      console.error('Error getting WhatsApp template:', error);
+      // Fallback to default template
+      const template = `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
+      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(template)}`;
+    }
+  };
+
+  const generateWhatsAppUrls = useCallback(async () => {
+    const urls: {[key: string]: string} = {};
+    
+    for (const registration of recentRegistrations) {
+      if (registration.no_telepon && registration.nama) {
+        try {
+          const url = await getWhatsAppUrl(registration.no_telepon, registration.nama);
+          urls[registration.id] = url;
+        } catch (error) {
+          console.error('Error generating WhatsApp URL for registration:', registration.id, error);
+          urls[registration.id] = '#';
+        }
+      }
+    }
+    
+    setWhatsappUrls(urls);
+  }, [recentRegistrations, getWhatsAppUrl]);
 
   const fetchDashboardData = async () => {
     try {
@@ -75,23 +109,15 @@ export default function AdminDashboard() {
     }
   };
 
-  const generateWhatsAppUrls = useCallback(async () => {
-    const urls: {[key: string]: string} = {};
-    
-    for (const registration of recentRegistrations) {
-      if (registration.no_telepon && registration.nama) {
-        try {
-          const url = await getWhatsAppUrl(registration.no_telepon, registration.nama);
-          urls[registration.id] = url;
-        } catch (error) {
-          console.error('Error generating WhatsApp URL for registration:', registration.id, error);
-          urls[registration.id] = '#';
-        }
-      }
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  useEffect(() => {
+    if (recentRegistrations.length > 0) {
+      generateWhatsAppUrls();
     }
-    
-    setWhatsappUrls(urls);
-  }, [recentRegistrations]);
+  }, [recentRegistrations, generateWhatsAppUrls]);
 
   const formatPhoneNumber = (phone: string) => {
     // Convert Indonesian phone number to WhatsApp format
@@ -117,32 +143,6 @@ export default function AdminDashboard() {
     
     // If none of the above, assume it needs 62 prefix
     return '62' + cleanPhone;
-  };
-
-  const getWhatsAppUrl = async (phone: string, nama: string) => {
-    if (!phone || !nama) {
-      console.log('Missing data:', { phone, nama });
-      return '#';
-    }
-    const formattedPhone = formatPhoneNumber(phone);
-    console.log('WhatsApp URL:', { originalPhone: phone, formattedPhone, nama });
-    
-    // Get template from database
-    try {
-      const result = await settingsService.getSetting('whatsapp_template');
-      const template = result.success && result.data 
-        ? result.data.value 
-        : `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
-      
-      // Replace {nama} placeholder with actual name
-      const personalizedTemplate = template.replace('{nama}', nama);
-      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(personalizedTemplate)}`;
-    } catch (error) {
-      console.error('Error getting WhatsApp template:', error);
-      // Fallback to default template
-      const template = `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
-      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(template)}`;
-    }
   };
 
   const getFakultasName = (fakultas: string) => {

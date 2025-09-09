@@ -45,13 +45,13 @@ export default function RegistrationsPage() {
 
   useEffect(() => {
     filterRegistrations();
-  }, [registrations, searchTerm, fakultasFilter]);
+  }, [filterRegistrations]);
 
   useEffect(() => {
     if (filteredRegistrations.length > 0) {
       generateWhatsAppUrls();
     }
-  }, [filteredRegistrations]);
+  }, [filteredRegistrations, generateWhatsAppUrls]);
 
   const fetchRegistrations = async () => {
     try {
@@ -102,7 +102,7 @@ export default function RegistrationsPage() {
     }
     
     setWhatsappUrls(urls);
-  }, [filteredRegistrations]);
+  }, [filteredRegistrations, getWhatsAppUrl]);
 
 
 

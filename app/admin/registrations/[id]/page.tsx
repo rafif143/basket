@@ -10,7 +10,6 @@ import {
   ArrowLeft,
   User,
   GraduationCap,
-  MapPin,
   FileText,
   Calendar,
   Download,
@@ -82,7 +81,7 @@ export default function RegistrationDetailPage() {
       console.error('Error generating WhatsApp URL:', error);
       setWhatsappUrl('#');
     }
-  }, [registration]);
+  }, [registration, getWhatsAppUrl]);
 
   const formatPhoneNumber = (phone: string) => {
     // Convert Indonesian phone number to WhatsApp format
