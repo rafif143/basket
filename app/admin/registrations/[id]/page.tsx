@@ -39,17 +39,31 @@ export default function RegistrationDetailPage() {
   const [loading, setLoading] = useState(true);
   const [whatsappUrl, setWhatsappUrl] = useState<string>('#');
 
-  useEffect(() => {
-    if (params.id) {
-      fetchRegistration(params.id as string);
+  const getWhatsAppUrl = async (phone: string, nama: string) => {
+    if (!phone || !nama) {
+      console.log('Missing data:', { phone, nama });
+      return '#';
     }
-  }, [params.id, fetchRegistration]);
-
-  useEffect(() => {
-    if (registration && registration.no_telepon && registration.nama) {
-      generateWhatsAppUrl();
+    const formattedPhone = formatPhoneNumber(phone);
+    console.log('WhatsApp URL:', { originalPhone: phone, formattedPhone, nama });
+    
+    // Get template from database
+    try {
+      const result = await settingsService.getSetting('whatsapp_template');
+      const template = result.success && result.data 
+        ? result.data.value 
+        : `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
+      
+      // Replace {nama} placeholder with actual name
+      const personalizedTemplate = template.replace('{nama}', nama);
+      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(personalizedTemplate)}`;
+    } catch (error) {
+      console.error('Error getting WhatsApp template:', error);
+      // Fallback to default template
+      const template = `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
+      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(template)}`;
     }
-  }, [registration, generateWhatsAppUrl]);
+  };
 
   const fetchRegistration = useCallback(async (id: string) => {
     try {
@@ -83,6 +97,18 @@ export default function RegistrationDetailPage() {
     }
   }, [registration, getWhatsAppUrl]);
 
+  useEffect(() => {
+    if (params.id) {
+      fetchRegistration(params.id as string);
+    }
+  }, [params.id, fetchRegistration]);
+
+  useEffect(() => {
+    if (registration && registration.no_telepon && registration.nama) {
+      generateWhatsAppUrl();
+    }
+  }, [registration, generateWhatsAppUrl]);
+
   const formatPhoneNumber = (phone: string) => {
     // Convert Indonesian phone number to WhatsApp format
     if (!phone) return '';
@@ -107,32 +133,6 @@ export default function RegistrationDetailPage() {
     
     // If none of the above, assume it needs 62 prefix
     return '62' + cleanPhone;
-  };
-
-  const getWhatsAppUrl = async (phone: string, nama: string) => {
-    if (!phone || !nama) {
-      console.log('Missing data:', { phone, nama });
-      return '#';
-    }
-    const formattedPhone = formatPhoneNumber(phone);
-    console.log('WhatsApp URL:', { originalPhone: phone, formattedPhone, nama });
-    
-    // Get template from database
-    try {
-      const result = await settingsService.getSetting('whatsapp_template');
-      const template = result.success && result.data 
-        ? result.data.value 
-        : `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
-      
-      // Replace {nama} placeholder with actual name
-      const personalizedTemplate = template.replace('{nama}', nama);
-      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(personalizedTemplate)}`;
-    } catch (error) {
-      console.error('Error getting WhatsApp template:', error);
-      // Fallback to default template
-      const template = `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
-      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(template)}`;
-    }
   };
 
   const getFakultasName = (fakultas: string) => {
