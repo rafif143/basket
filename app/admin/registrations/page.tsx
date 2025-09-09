@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Search,
@@ -68,7 +67,7 @@ export default function RegistrationsPage() {
     }
   };
 
-  const filterRegistrations = () => {
+  const filterRegistrations = useCallback(() => {
     let filtered = registrations;
 
     // Search filter
@@ -85,9 +84,9 @@ export default function RegistrationsPage() {
     }
 
     setFilteredRegistrations(filtered);
-  };
+  }, [registrations, searchTerm, fakultasFilter]);
 
-  const generateWhatsAppUrls = async () => {
+  const generateWhatsAppUrls = useCallback(async () => {
     const urls: {[key: string]: string} = {};
     
     for (const registration of filteredRegistrations) {
@@ -103,7 +102,7 @@ export default function RegistrationsPage() {
     }
     
     setWhatsappUrls(urls);
-  };
+  }, [filteredRegistrations]);
 
 
 

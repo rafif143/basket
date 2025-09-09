@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
   ArrowLeft,
@@ -38,22 +38,21 @@ export default function RegistrationDetailPage() {
   const router = useRouter();
   const [registration, setRegistration] = useState<Registration | null>(null);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
   const [whatsappUrl, setWhatsappUrl] = useState<string>('#');
 
   useEffect(() => {
     if (params.id) {
       fetchRegistration(params.id as string);
     }
-  }, [params.id]);
+  }, [params.id, fetchRegistration]);
 
   useEffect(() => {
     if (registration && registration.no_telepon && registration.nama) {
       generateWhatsAppUrl();
     }
-  }, [registration]);
+  }, [registration, generateWhatsAppUrl]);
 
-  const fetchRegistration = async (id: string) => {
+  const fetchRegistration = useCallback(async (id: string) => {
     try {
       setLoading(true);
       const result = await registrationService.getAllRegistrations();
@@ -71,9 +70,9 @@ export default function RegistrationDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
 
-  const generateWhatsAppUrl = async () => {
+  const generateWhatsAppUrl = useCallback(async () => {
     if (!registration || !registration.no_telepon || !registration.nama) return;
     
     try {
@@ -83,7 +82,7 @@ export default function RegistrationDetailPage() {
       console.error('Error generating WhatsApp URL:', error);
       setWhatsappUrl('#');
     }
-  };
+  }, [registration]);
 
   const formatPhoneNumber = (phone: string) => {
     // Convert Indonesian phone number to WhatsApp format
@@ -271,11 +270,12 @@ export default function RegistrationDetailPage() {
             <CardContent>
               {registration.foto_ktm_url ? (
                 <div className="space-y-3">
-                  <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
-                    <img
+                  <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden relative">
+                    <Image
                       src={registration.foto_ktm_url}
                       alt="Foto KTM"
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <Button

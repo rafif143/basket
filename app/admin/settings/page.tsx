@@ -3,9 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { 
-  Settings,
   Save,
   RefreshCw,
   MessageCircle,
@@ -72,7 +70,8 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error('Error saving settings:', error);
-      setMessage({ type: 'error', text: 'Terjadi kesalahan saat menyimpan pengaturan: ' + error.message });
+      const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan saat menyimpan pengaturan';
+      setMessage({ type: 'error', text: errorMessage });
     } finally {
       setSaving(false);
     }

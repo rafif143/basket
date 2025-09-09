@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, X, Trophy, Users, Calendar } from "lucide-react";
+import { Menu, Trophy } from "lucide-react";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -91,7 +91,7 @@ export function Header() {
                 {/* Navigation Section */}
                 <nav className="flex-1 px-2">
                   <div className="space-y-2">
-                    {navigation.map((item, index) => (
+                    {navigation.map((item) => (
                       item.href.startsWith('#') ? (
                         <a
                           key={item.name}

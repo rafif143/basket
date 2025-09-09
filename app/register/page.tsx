@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, User, FileText, MapPin, GraduationCap, BookOpen, MessageSquare, CheckCircle, Upload, ArrowLeft, CheckCircle2, XCircle } from "lucide-react";
+import { Trophy, User, MapPin, GraduationCap, BookOpen, MessageSquare, CheckCircle, Upload, ArrowLeft, CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { registrationService } from "@/lib/supabase";
 

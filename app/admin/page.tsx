@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { 
   Users, 
-  TrendingUp,
   Calendar,
   GraduationCap,
   BookOpen,
@@ -43,7 +41,7 @@ export default function AdminDashboard() {
     if (recentRegistrations.length > 0) {
       generateWhatsAppUrls();
     }
-  }, [recentRegistrations]);
+  }, [recentRegistrations, generateWhatsAppUrls]);
 
   const fetchDashboardData = async () => {
     try {
@@ -77,7 +75,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const generateWhatsAppUrls = async () => {
+  const generateWhatsAppUrls = useCallback(async () => {
     const urls: {[key: string]: string} = {};
     
     for (const registration of recentRegistrations) {
@@ -93,7 +91,7 @@ export default function AdminDashboard() {
     }
     
     setWhatsappUrls(urls);
-  };
+  }, [recentRegistrations]);
 
   const formatPhoneNumber = (phone: string) => {
     // Convert Indonesian phone number to WhatsApp format

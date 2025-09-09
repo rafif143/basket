@@ -2,19 +2,11 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Crown, 
-  Star, 
-  Target, 
-  Zap, 
   Shield,
-  Trophy,
-  Award,
-  Users,
-  Calendar,
-  MapPin
+  Users
 } from "lucide-react";
 import { useState, useEffect } from "react";
 

@@ -213,7 +213,7 @@ export function GallerySection() {
 
         {/* Gallery Grid */}
         <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          {filteredItems.map((item, index) => (
+          {filteredItems.map((item) => (
             <Card 
               key={item.id}
               className="bg-black/40 backdrop-blur-sm border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 hover:transform hover:scale-105 group overflow-hidden"

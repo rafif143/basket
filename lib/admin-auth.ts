@@ -31,7 +31,7 @@ export class AdminAuth {
       }
       
       return true;
-    } catch (error) {
+    } catch {
       this.logout();
       return false;
     }
@@ -55,7 +55,7 @@ export class AdminAuth {
       }
       
       return session;
-    } catch (error) {
+    } catch {
       this.logout();
       return null;
     }

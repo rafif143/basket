@@ -58,9 +58,10 @@ export default function AdminLoginPage() {
         // Redirect to admin dashboard
         router.push('/admin');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      setError(error.message || 'Terjadi kesalahan saat login');
+      const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan saat login';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
