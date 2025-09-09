@@ -110,21 +110,22 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Back Button */}
-      <div className="fixed top-4 left-4 z-50">
+      <div className="fixed top-2 left-2 md:top-4 md:left-4 z-50">
         <Link href="/">
           <Button 
             variant="outline" 
             size="sm"
-            className="bg-black/80 backdrop-blur-md border-orange-500/30 text-orange-400 hover:bg-orange-500 hover:text-white transition-all duration-300"
+            className="bg-black/80 backdrop-blur-md border-orange-500/30 text-orange-400 hover:bg-orange-500 hover:text-white transition-all duration-300 text-xs md:text-sm px-2 md:px-3 py-1 md:py-2"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Kembali
+            <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+            <span className="hidden sm:inline">Kembali</span>
+            <span className="sm:hidden">←</span>
           </Button>
         </Link>
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-16 bg-gradient-to-br from-black via-gray-900 to-black">
+      <section className="relative pt-16 md:pt-20 pb-12 md:pb-16 bg-gradient-to-br from-black via-gray-900 to-black">
         <div className="absolute inset-0">
           <div className="absolute inset-0 opacity-10">
             <div className="w-full h-full" style={{
@@ -148,17 +149,17 @@ export default function RegisterPage() {
             🏀 Bergabung dengan Tim Terbaik
           </Badge>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight">
             <span className="bg-gradient-to-r from-orange-400 via-orange-500 to-red-600 bg-clip-text text-transparent">
               PENDAFTARAN
             </span>
             <br />
-            <span className="text-2xl md:text-4xl text-gray-300">
+            <span className="text-xl sm:text-2xl md:text-4xl text-gray-300">
               Basket ITB Yadika
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed px-4">
             Daftarkan diri Anda sekarang dan bergabunglah dengan komunitas basket terbaik di ITB Yadika Pasuruan. 
             Raih prestasi bersama tim yang solid dan penuh semangat!
           </p>
@@ -166,12 +167,12 @@ export default function RegisterPage() {
       </section>
 
       {/* Registration Form */}
-      <section className="py-16 bg-black">
+      <section className="py-8 md:py-16 bg-black">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
               {/* Form */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 order-2 lg:order-1">
                 <Card className="bg-black/40 backdrop-blur-sm border border-orange-500/20">
                   <CardHeader>
                     <CardTitle className="text-2xl font-bold text-white flex items-center">
@@ -209,7 +210,7 @@ export default function RegisterPage() {
                       </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                       {/* Nama */}
                       <div>
                         <label className="block text-sm font-medium text-white mb-2">
@@ -221,7 +222,7 @@ export default function RegisterPage() {
                           value={formData.nama}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                          className="w-full px-3 md:px-4 py-2 md:py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm md:text-base"
                           placeholder="Masukkan nama lengkap Anda"
                         />
                       </div>
@@ -237,7 +238,7 @@ export default function RegisterPage() {
                           value={formData.nim}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                          className="w-full px-3 md:px-4 py-2 md:py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm md:text-base"
                           placeholder="Masukkan NIM Anda"
                         />
                       </div>
@@ -253,7 +254,7 @@ export default function RegisterPage() {
                           value={formData.noTelepon}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                          className="w-full px-3 md:px-4 py-2 md:py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm md:text-base"
                           placeholder="Contoh: 081234567890"
                         />
                         <p className="text-xs text-gray-400 mt-1">Gunakan format: 08xxxxxxxxxx</p>
@@ -270,7 +271,7 @@ export default function RegisterPage() {
                             accept="image/*"
                             onChange={handleFileChange}
                             required
-                            className="w-full px-4 py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-orange-500 file:text-white hover:file:bg-orange-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                            className="w-full px-3 md:px-4 py-2 md:py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white file:mr-2 md:file:mr-4 file:py-1 md:file:py-2 file:px-2 md:file:px-4 file:rounded-md file:border-0 file:text-xs md:file:text-sm file:font-medium file:bg-orange-500 file:text-white hover:file:bg-orange-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 text-sm md:text-base"
                           />
                           <Upload className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                         </div>
@@ -289,7 +290,7 @@ export default function RegisterPage() {
                           onChange={handleInputChange}
                           required
                           rows={3}
-                          className="w-full px-4 py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 resize-none"
+                          className="w-full px-3 md:px-4 py-2 md:py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 resize-none text-sm md:text-base"
                           placeholder="Masukkan alamat domisili lengkap Anda"
                         />
                       </div>
@@ -349,7 +350,7 @@ export default function RegisterPage() {
                           onChange={handleInputChange}
                           required
                           rows={4}
-                          className="w-full px-4 py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 resize-none"
+                          className="w-full px-3 md:px-4 py-2 md:py-3 bg-black/50 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 resize-none text-sm md:text-base"
                           placeholder="Ceritakan alasan Anda ingin bergabung dengan Basket ITB Yadika..."
                         />
                       </div>
@@ -358,7 +359,7 @@ export default function RegisterPage() {
                       <Button
                         type="submit"
                         disabled={isSubmitting || isSuccess}
-                        className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white py-4 text-lg font-semibold shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white py-2 md:py-4 text-sm md:text-lg font-semibold shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isSubmitting ? (
                           <>
@@ -383,8 +384,8 @@ export default function RegisterPage() {
               </div>
 
               {/* Requirements Sidebar */}
-              <div className="lg:col-span-1">
-                <Card className="bg-black/40 backdrop-blur-sm border border-orange-500/20 sticky top-24">
+              <div className="lg:col-span-1 order-1 lg:order-2">
+                <Card className="bg-black/40 backdrop-blur-sm border border-orange-500/20 lg:sticky lg:top-24">
                   <CardHeader>
                     <CardTitle className="text-xl font-bold text-white flex items-center">
                       <CheckCircle className="w-5 h-5 mr-2 text-orange-500" />
