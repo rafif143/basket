@@ -39,33 +39,49 @@ export default function RegistrationsPage() {
   const [fakultasFilter, setFakultasFilter] = useState("all");
   const [whatsappUrls, setWhatsappUrls] = useState<{[key: string]: string}>({});
 
-  useEffect(() => {
-    fetchRegistrations();
-  }, []);
-
-  useEffect(() => {
-    filterRegistrations();
-  }, [filterRegistrations]);
-
-  useEffect(() => {
-    if (filteredRegistrations.length > 0) {
-      generateWhatsAppUrls();
+  const getWhatsAppUrl = async (phone: string, nama: string) => {
+    if (!phone || !nama) {
+      console.log('Missing data:', { phone, nama });
+      return '#';
     }
-  }, [filteredRegistrations, generateWhatsAppUrls]);
-
-  const fetchRegistrations = async () => {
+    const formattedPhone = formatPhoneNumber(phone);
+    console.log('WhatsApp URL:', { originalPhone: phone, formattedPhone, nama });
+    
+    // Get template from database
     try {
-      setLoading(true);
-      const result = await registrationService.getAllRegistrations();
-      if (result.success && result.data) {
-        setRegistrations(result.data);
-      }
+      const result = await settingsService.getSetting('whatsapp_template');
+      const template = result.success && result.data 
+        ? result.data.value 
+        : `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
+      
+      // Replace {nama} placeholder with actual name
+      const personalizedTemplate = template.replace('{nama}', nama);
+      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(personalizedTemplate)}`;
     } catch (error) {
-      console.error('Error fetching registrations:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error getting WhatsApp template:', error);
+      // Fallback to default template
+      const template = `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
+      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(template)}`;
     }
   };
+
+  const generateWhatsAppUrls = useCallback(async () => {
+    const urls: {[key: string]: string} = {};
+    
+    for (const registration of filteredRegistrations) {
+      if (registration.no_telepon && registration.nama) {
+        try {
+          const url = await getWhatsAppUrl(registration.no_telepon, registration.nama);
+          urls[registration.id] = url;
+        } catch (error) {
+          console.error('Error generating WhatsApp URL for registration:', registration.id, error);
+          urls[registration.id] = '#';
+        }
+      }
+    }
+    
+    setWhatsappUrls(urls);
+  }, [filteredRegistrations, getWhatsAppUrl]);
 
   const filterRegistrations = useCallback(() => {
     let filtered = registrations;
@@ -86,23 +102,33 @@ export default function RegistrationsPage() {
     setFilteredRegistrations(filtered);
   }, [registrations, searchTerm, fakultasFilter]);
 
-  const generateWhatsAppUrls = useCallback(async () => {
-    const urls: {[key: string]: string} = {};
-    
-    for (const registration of filteredRegistrations) {
-      if (registration.no_telepon && registration.nama) {
-        try {
-          const url = await getWhatsAppUrl(registration.no_telepon, registration.nama);
-          urls[registration.id] = url;
-        } catch (error) {
-          console.error('Error generating WhatsApp URL for registration:', registration.id, error);
-          urls[registration.id] = '#';
-        }
+  const fetchRegistrations = async () => {
+    try {
+      setLoading(true);
+      const result = await registrationService.getAllRegistrations();
+      if (result.success && result.data) {
+        setRegistrations(result.data);
       }
+    } catch (error) {
+      console.error('Error fetching registrations:', error);
+    } finally {
+      setLoading(false);
     }
-    
-    setWhatsappUrls(urls);
-  }, [filteredRegistrations, getWhatsAppUrl]);
+  };
+
+  useEffect(() => {
+    fetchRegistrations();
+  }, []);
+
+  useEffect(() => {
+    filterRegistrations();
+  }, [filterRegistrations]);
+
+  useEffect(() => {
+    if (filteredRegistrations.length > 0) {
+      generateWhatsAppUrls();
+    }
+  }, [filteredRegistrations, generateWhatsAppUrls]);
 
 
 
@@ -134,32 +160,6 @@ export default function RegistrationsPage() {
     
     // If none of the above, assume it needs 62 prefix
     return '62' + cleanPhone;
-  };
-
-  const getWhatsAppUrl = async (phone: string, nama: string) => {
-    if (!phone || !nama) {
-      console.log('Missing data:', { phone, nama });
-      return '#';
-    }
-    const formattedPhone = formatPhoneNumber(phone);
-    console.log('WhatsApp URL:', { originalPhone: phone, formattedPhone, nama });
-    
-    // Get template from database
-    try {
-      const result = await settingsService.getSetting('whatsapp_template');
-      const template = result.success && result.data 
-        ? result.data.value 
-        : `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
-      
-      // Replace {nama} placeholder with actual name
-      const personalizedTemplate = template.replace('{nama}', nama);
-      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(personalizedTemplate)}`;
-    } catch (error) {
-      console.error('Error getting WhatsApp template:', error);
-      // Fallback to default template
-      const template = `Halo ${nama}! Terima kasih telah mendaftar di UKM Basket ITB Yadika. Kami akan segera menghubungi Anda untuk informasi lebih lanjut. Salam, Tim Basket ITB Yadika`;
-      return `https://wa.me/${formattedPhone}?text=${encodeURIComponent(template)}`;
-    }
   };
 
   const getProgramStudiName = (programStudi: string) => {
